@@ -3,6 +3,7 @@ from langchain_groq import ChatGroq
 from langgraph.graph import MessagesState
 from langgraph.graph import StateGraph, START, END
 from langgraph.prebuilt import ToolNode, tools_condition
+import time
 
 
 # Tool
@@ -13,7 +14,8 @@ def multiply(a: int, b: int) -> int:
         a: first int
         b: second int
     """
-    return a * b
+    time.sleep(5)
+    return f"The answer is {a * b}"
 
 
 # LLM with bound tool
