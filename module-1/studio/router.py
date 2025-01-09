@@ -1,7 +1,9 @@
-from langchain_openai import ChatOpenAI
+# from langchain_openai import ChatOpenAI
+from langchain_groq import ChatGroq
 from langgraph.graph import MessagesState
 from langgraph.graph import StateGraph, START, END
 from langgraph.prebuilt import ToolNode, tools_condition
+
 
 # Tool
 def multiply(a: int, b: int) -> int:
@@ -13,13 +15,23 @@ def multiply(a: int, b: int) -> int:
     """
     return a * b
 
+
 # LLM with bound tool
-llm = ChatOpenAI(model="gpt-4o")
+# llm = ChatOpenAI(model="gpt-4o")
+llm = ChatGroq(
+    model="llama-3.3-70b-versatile",
+    temperature=0,
+    max_tokens=None,
+    timeout=None,
+    max_retries=2,
+)
 llm_with_tools = llm.bind_tools([multiply])
+
 
 # Node
 def tool_calling_llm(state: MessagesState):
     return {"messages": [llm_with_tools.invoke(state["messages"])]}
+
 
 # Build graph
 builder = StateGraph(MessagesState)
